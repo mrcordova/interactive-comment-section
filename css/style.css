@@ -30,7 +30,7 @@
   --Very-light-gray: hsl(228, 33%, 97%);
   --White: hsl(0, 0%, 100%);
 }
-/* 220, 18, 97 */
+
 body {
   display: grid;
   min-height: 100svh;
@@ -45,14 +45,22 @@ main {
 }
 .comment-container {
   background-color: var(--White);
+  /* Mobile */
+  padding: 1rem;
+  border-radius: 0.5rem;
 }
 .username-container {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
   width: max-content;
 }
-
+.username {
+  color: var(--Dark-blue);
+}
+.createdAt {
+  color: var(--Grayish-Blue);
+}
 .score-container {
   display: flex;
   align-items: center;
@@ -60,7 +68,9 @@ main {
   width: max-content;
   gap: 0.5rem;
 }
-
+.profile-img {
+  width: 2.1rem;
+}
 .reply-container {
   display: flex;
   align-items: center;
