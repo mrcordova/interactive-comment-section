@@ -45,6 +45,7 @@ main {
   grid-template-rows: max-content;
   place-content: safe center;
   margin-inline: 0.5rem;
+  margin-block-start: 1.3rem;
 }
 .comment-container {
   background-color: var(--White);
