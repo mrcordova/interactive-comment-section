@@ -178,3 +178,34 @@ p {
   margin-inline-start: auto;
   gap: 0.9rem;
 }
+
+.add-comment-container {
+  display: grid;
+  background-color: var(--White);
+  padding: 1rem;
+  margin-block-start: 0.5rem;
+  width: 100%;
+  gap: 0.5rem;
+}
+#add-comment {
+  grid-row: 1;
+  grid-column: 1;
+}
+.add-comment-pic {
+  grid-row: 2;
+  grid-column: 1;
+  width: 2rem;
+  align-self: center;
+  /* vertical-align: middle; */
+}
+.send-btn {
+  grid-row: 2;
+  grid-column: 1;
+  background-color: var(--Moderate-blue);
+  color: var(--White);
+  padding-inline: 1.5rem;
+  padding-block: 0.5rem;
+  border-radius: 0.4rem;
+  margin-inline-start: auto;
+  width: max-content;
+}
