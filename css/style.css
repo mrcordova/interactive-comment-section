@@ -190,6 +190,11 @@ p {
 #add-comment {
   grid-row: 1;
   grid-column: 1;
+  /* all: unset; */
+  border: 1px solid var(--Light-gray);
+  padding: 1rem;
+  resize: none;
+  /* overflow: scroll; */
 }
 .add-comment-pic {
   grid-row: 2;
