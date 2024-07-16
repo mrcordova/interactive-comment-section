@@ -1,0 +1,69 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+
+.rubik-400 {
+  font-family: "Rubik", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+.rubik-500 {
+  font-family: "Rubik", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+.rubik-700 {
+  font-family: "Rubik", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+:root {
+  --Moderate-blue: hsl(238, 40%, 52%);
+  --Soft-Red: hsl(358, 79%, 66%);
+  --Light-grayish-blue: hsl(239, 57%, 85%);
+  --Pale-red: hsl(357, 100%, 86%);
+
+  --Dark-blue: hsl(212, 24%, 26%);
+  --Grayish-Blue: hsl(211, 10%, 45%);
+  --Light-gray: hsl(223, 19%, 93%);
+  --Very-light-gray: hsl(228, 33%, 97%);
+  --White: hsl(0, 0%, 100%);
+}
+/* 220, 18, 97 */
+body {
+  display: grid;
+  min-height: 100svh;
+  min-height: 100vh;
+  background-color: var(--Very-light-gray);
+}
+
+main {
+  display: grid;
+  height: 100%;
+  place-content: center;
+}
+.comment-container {
+  background-color: var(--White);
+}
+.username-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: max-content;
+}
+
+.score-container {
+  display: flex;
+  align-items: center;
+  background-color: var(--Light-gray);
+  width: max-content;
+  gap: 0.5rem;
+}
+
+.reply-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: max-content;
+}
