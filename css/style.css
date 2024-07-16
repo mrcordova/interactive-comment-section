@@ -133,9 +133,7 @@ p {
 
 .replies {
   padding: 0;
-  /* margin-inline: 0;
-  margin-block: 0;
-  padding-inline-start: 0; */
+
   list-style: none;
   border-left: 3px solid var(--Light-gray);
 }
@@ -145,4 +143,13 @@ p {
 
 .reply > .comment-container > .content {
   width: 28ch;
+}
+.you {
+  background-color: var(--Moderate-blue);
+  color: var(--White);
+  font-size: 0.8rem;
+  margin-inline-start: 0.2rem;
+  padding-inline: 0.4rem;
+  padding-block: 0.1rem;
+  text-align: center;
 }
