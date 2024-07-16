@@ -182,19 +182,25 @@ p {
 .add-comment-container {
   display: grid;
   background-color: var(--White);
-  padding: 1rem;
+  padding: 0.7rem 1rem;
   margin-block-start: 0.5rem;
   width: 100%;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 #add-comment {
   grid-row: 1;
   grid-column: 1;
-  /* all: unset; */
+  all: unset;
   border: 1px solid var(--Light-gray);
-  padding: 0.5rem 1rem;
+  padding: 0.8rem 1.5rem;
   resize: none;
+  height: 4.4rem;
   /* overflow: scroll; */
+}
+
+#add-comment:hover {
+  border: 1px solid var(--Moderate-blue);
+  cursor: pointer;
 }
 .add-comment-pic {
   grid-row: 2;
@@ -208,8 +214,8 @@ p {
   grid-column: 1;
   background-color: var(--Moderate-blue);
   color: var(--White);
-  padding-inline: 1.5rem;
-  padding-block: 0.5rem;
+  padding-inline: 1.9rem;
+  padding-block: 0.8rem;
   border-radius: 0.4rem;
   margin-inline-start: auto;
   width: max-content;
