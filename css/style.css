@@ -55,7 +55,7 @@ main {
   /* Mobile */
   padding-block: 1rem;
   padding-inline: 1rem;
-  /* max-inline-size: 20rem; */
+
   padding-inline-start: 1rem;
 
   border-radius: 0.5rem;
@@ -83,7 +83,7 @@ main {
   padding-block-end: 0.9rem;
   /* min-width: 30ch; */
   /* max-width: 30ch; */
-  width: 30ch;
+  width: 29.5ch;
   grid-row: 2;
 
   /* grid-column: 1 / -1; */
