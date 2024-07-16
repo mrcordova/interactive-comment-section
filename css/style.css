@@ -148,8 +148,33 @@ p {
   background-color: var(--Moderate-blue);
   color: var(--White);
   font-size: 0.8rem;
-  margin-inline-start: 0.2rem;
+  /* margin-inline-start: 0.2rem; */
   padding-inline: 0.4rem;
-  padding-block: 0.1rem;
+  padding-block: 0rem;
   text-align: center;
+}
+.username:has(.you) {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+.edit-btn,
+.delete-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.edit-btn {
+  color: var(--Moderate-blue);
+}
+.delete-btn {
+  color: var(--Soft-Red);
+}
+
+.current-user-btns {
+  grid-row: 3;
+  grid-column: 1;
+  display: flex;
+  margin-inline-start: auto;
+  gap: 0.9rem;
 }
