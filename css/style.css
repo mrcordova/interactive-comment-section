@@ -192,7 +192,7 @@ p {
   grid-column: 1;
   /* all: unset; */
   border: 1px solid var(--Light-gray);
-  padding: 1rem;
+  padding: 0.5rem 1rem;
   resize: none;
   /* overflow: scroll; */
 }
@@ -213,4 +213,8 @@ p {
   border-radius: 0.4rem;
   margin-inline-start: auto;
   width: max-content;
+}
+
+button:hover {
+  cursor: pointer;
 }
