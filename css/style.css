@@ -48,17 +48,23 @@ main {
   /* Mobile */
   padding: 1rem;
   border-radius: 0.5rem;
+  margin: 1rem;
 }
 .username-container {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.9rem;
   width: max-content;
+  padding-block-end: 1rem;
 }
 .username {
   color: var(--Dark-blue);
 }
 .createdAt {
+  color: var(--Grayish-Blue);
+}
+
+.content {
   color: var(--Grayish-Blue);
 }
 .score-container {
