@@ -224,7 +224,26 @@ p {
 button:hover {
   cursor: pointer;
 }
+.send-btn:hover {
+  background-color: var(--Light-grayish-blue);
+}
 
+:is(.reply-container, .edit-btn):hover {
+  color: var(--Light-grayish-blue);
+}
+:is(.edit-btn:hover, .reply-container):hover > svg > path {
+  /* fill: hsl(241, 54%, 85%); */
+  fill: var(--Light-grayish-blue);
+}
+.delete-btn:hover {
+  color: var(--Pale-red);
+}
+.delete-btn:hover > svg > path {
+  fill: var(--Pale-red);
+}
+.score-container > button:hover > svg > path {
+  fill: var(--Moderate-blue);
+}
 dialog[open] {
   display: flex;
   flex-direction: column;
