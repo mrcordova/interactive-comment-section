@@ -4,6 +4,9 @@
 });
 const dataResponse = await fetch("http://127.0.0.1:5500/data.json");
 const data = await dataResponse.json();
+let dialog = document.querySelector("dialog");
+const deleteBtn = document.querySelector(".delete-btn");
+const cancelBtn = document.querySelector(".no-cancel-btn");
 const currentUser = {
   username: data["currentUser"].username,
   image: data["currentUser"].image,
@@ -11,7 +14,12 @@ const currentUser = {
   comments: [],
 };
 const users = {};
-
+function openDialog() {
+  dialog.showModal();
+}
+function closeDialog() {
+  dialog.close();
+}
 for (const [key, val] of Object.entries(data)) {
   if (key === "comments") {
     for (const comment of val) {
@@ -43,3 +51,5 @@ for (const [key, val] of Object.entries(data)) {
 }
 // console.log(currentUser);
 console.log(users);
+deleteBtn.addEventListener("click", openDialog);
+cancelBtn.addEventListener("click", closeDialog);

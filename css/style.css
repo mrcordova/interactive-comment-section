@@ -224,3 +224,45 @@ p {
 button:hover {
   cursor: pointer;
 }
+
+dialog[open] {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  max-inline-size: 20.125rem;
+  border-radius: 0.5rem;
+}
+
+.dialog-header {
+  color: var(--Dark-blue);
+  font-size: 1.2rem;
+}
+.dialog-para {
+  color: var(--Grayish-Blue);
+}
+.dialog-btns {
+  display: flex;
+  justify-content: space-between;
+}
+.no-cancel-btn,
+.yes-delete-btn {
+  color: var(--White);
+  padding-inline: 1.1rem;
+  padding-block: 0.7rem;
+  border-radius: 0.5rem;
+}
+.no-cancel-btn {
+  background-color: var(--Grayish-Blue);
+}
+.yes-delete-btn {
+  background-color: var(--Soft-Red);
+}
+dialog::backdrop {
+  background-color: hsl(from black h s l / 0.5);
+}
