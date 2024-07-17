@@ -295,13 +295,19 @@ dialog[open] {
   left: 0;
   right: 0;
   margin: auto;
-  max-inline-size: 20.125rem;
+  max-inline-size: clamp(20.125rem, 19.1127rem + 4.3192vw, 23rem);
+  /* max-inline-size: 20.125rem; */
+  /* max-inline-size: 23rem; */
   border-radius: 0.5rem;
 }
 
 .dialog-header {
   color: var(--Dark-blue);
-  font-size: 1.2rem;
+  font-size: clamp(1.2rem, 1.0944rem + 0.4507vw, 1.5rem);
+  /* Mobile */
+  /* font-size: 1.2rem; */
+  /* Desktop */
+  /* font-size: 1.5rem; */
 }
 .dialog-para {
   color: var(--Grayish-Blue);
@@ -313,7 +319,13 @@ dialog[open] {
 .no-cancel-btn,
 .yes-delete-btn {
   color: var(--White);
-  padding-inline: 1.1rem;
+  padding-inline: clamp(1.1rem, 0.9592rem + 0.6009vw, 1.5rem);
+  /* Mobile */
+  /* padding-inline: 1.1rem; */
+  /* padding-block: 0.7rem; */
+  /* border-radius: 0.5rem; */
+  /* Desktop */
+  /* padding-inline: 1.5rem; */
   padding-block: 0.7rem;
   border-radius: 0.5rem;
 }
