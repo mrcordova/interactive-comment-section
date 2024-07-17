@@ -241,7 +241,7 @@ button:hover {
 .delete-btn:hover > svg > path {
   fill: var(--Pale-red);
 }
-.score-container > button:hover > svg > path {
+:is(.plus-sign-btn, .minus-sign-btn):hover > svg > path {
   fill: var(--Moderate-blue);
 }
 dialog[open] {
@@ -279,8 +279,14 @@ dialog[open] {
 .no-cancel-btn {
   background-color: var(--Grayish-Blue);
 }
+.no-cancel-btn:hover {
+  background-color: var(--Light-grayish-blue);
+}
 .yes-delete-btn {
   background-color: var(--Soft-Red);
+}
+.yes-delete-btn:hover {
+  background-color: var(--Pale-red);
 }
 dialog::backdrop {
   background-color: hsl(from black h s l / 0.5);
