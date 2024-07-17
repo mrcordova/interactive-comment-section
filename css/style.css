@@ -46,6 +46,7 @@ main {
   place-content: safe center;
   margin-inline: 0.5rem;
   margin-block-start: 1.3rem;
+  transition: 1s ease;
 }
 .comment-container {
   background-color: var(--White);
@@ -68,6 +69,8 @@ main {
   border-radius: 0.5rem;
 
   margin-block-end: 1rem;
+
+  transition: 1s ease;
 }
 .username-container {
   grid-row: 1;
@@ -95,10 +98,10 @@ main {
 
   /* Mobile */
   /* padding-block-end: 0.9rem; */
-  /* width: 29.5ch; */
+  width: 29.5ch;
   /* Desktop */
   padding-block-end: 0.9rem;
-  width: 59ch;
+  /* width: 59ch; */
 }
 
 p {
@@ -114,6 +117,8 @@ p {
   background-color: var(--Light-gray);
   width: max-content;
 
+  padding-block: clamp(0.5rem, 0.3239rem + 0.7512vw, 1rem);
+  padding-inline: clamp(0.8rem, 1.0704rem + -0.3005vw, 1rem);
   /* Mobile */
   /* gap: 1rem; */
   /* padding-block: 0.5rem; */
@@ -123,11 +128,13 @@ p {
   /* Desktop */
 
   gap: 1rem;
-  padding-block: 1rem;
-  padding-inline: 0.8rem;
+  /* padding-block: 1rem; */
+  /* padding-inline: 0.8rem; */
   height: max-content;
   justify-content: center;
   border-radius: 0.7rem;
+
+  transition: 1s ease;
 }
 
 .score {
@@ -145,6 +152,8 @@ p {
   gap: 0.5rem;
   width: max-content;
   color: var(--Moderate-blue);
+
+  transition: 1s ease;
 }
 .replyingTo {
   color: var(--Moderate-blue);
@@ -155,16 +164,25 @@ p {
 
   list-style: none;
   border-left: 3px solid var(--Light-gray);
+
+  margin-inline-start: clamp(0rem, -0.7923rem + 3.3803vw, 2.25rem);
+  /* Desktop */
+  /* margin-inline-start: 2rem; */
 }
 .reply > .comment-container {
-  margin-inline-start: 1rem;
+  margin-inline-start: clamp(1rem, 0.5599rem + 1.8779vw, 2.25rem);
+  /* Mobile */
+  /* margin-inline-start: 1rem; */
+  /* Desktop */
+  /* margin-inline-start: 2rem; */
 }
 
 .reply > .comment-container > .content {
   /* Mobile */
-  /* width: 28ch; */
+  width: 28ch;
   /* Desktop */
-  width: 56ch;
+  /* width: 35rem; */
+  /* width: 53ch; */
 }
 .you {
   background-color: var(--Moderate-blue);
@@ -221,8 +239,6 @@ p {
   padding: 0.8rem 1.5rem;
   resize: none;
   height: 4.4rem;
-  /* width: 10rem; */
-  /* width: 100%; */
 }
 
 #add-comment:hover {
@@ -233,9 +249,6 @@ p {
   grid-row: 2;
   grid-column: 1;
   width: 2rem;
-  /* max-width: max-content; */
-  /* align-self: center; */
-  /* vertical-align: middle; */
 }
 .send-btn {
   grid-row: 2;
@@ -332,11 +345,15 @@ dialog::backdrop {
 
   .content {
     grid-column: 2;
+    width: 59ch;
   }
 
   .reply-container {
     grid-column: 2;
     grid-row: 1;
+  }
+  .reply > .comment-container > .content {
+    width: 53ch;
   }
 
   .current-user-btns {
@@ -353,7 +370,6 @@ dialog::backdrop {
   #add-comment {
     grid-row: 1;
     grid-column: 2;
-    /* margin-inline: auto; */
   }
   .send-btn {
     grid-row: 1;
