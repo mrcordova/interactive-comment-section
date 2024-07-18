@@ -48,7 +48,13 @@ const createReplyBtn = function () {
   replyBtn.appendChild(replyText);
   return replyBtn;
 };
-
+const editComment = (e) => {
+  // console.log(e.currentTarget.parentElement.parentElement);e
+  const comment = e.currentTarget.parentElement.parentElement;
+  const para = comment.querySelector(".content");
+  para.setAttribute("contenteditable", "true");
+  para.focus({ focusVisible: true });
+};
 const createCurrentUserBtns = function () {
   const currentUserBtns = document.createElement("div");
   currentUserBtns.classList.add("current-user-btns");
@@ -66,6 +72,7 @@ const createCurrentUserBtns = function () {
   );
   const deleteText = document.createTextNode("Delete");
   deleteBtn.appendChild(deleteText);
+  deleteBtn.addEventListener("click", openDialog);
 
   const editBtn = document.createElement("button");
   editBtn.setAttribute("class", "edit-btn rubik-700");
@@ -81,6 +88,8 @@ const createCurrentUserBtns = function () {
 
   const editText = document.createTextNode("Edit");
   editBtn.appendChild(editText);
+
+  editBtn.addEventListener("click", editComment);
 
   currentUserBtns.appendChild(deleteBtn);
   currentUserBtns.appendChild(editBtn);
@@ -253,4 +262,4 @@ for (const [key, val] of Object.entries(data)) {
 // console.log(currentUser);
 console.log(users);
 // deleteBtn.addEventListener("click", openDialog);
-// cancelBtn.addEventListener("click", closeDialog);
+cancelBtn.addEventListener("click", closeDialog);
