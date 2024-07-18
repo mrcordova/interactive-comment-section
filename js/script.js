@@ -90,7 +90,6 @@ const createComment = function ({
   content,
   id,
   createdAt,
-  replies,
   score,
   user,
   replyingTo = "",
@@ -99,6 +98,12 @@ const createComment = function ({
   const commentDiv = document.createElement("div");
   commentDiv.classList.add("comment-container");
 
+  if (replyingTo != "") {
+    const replyLi = document.createElement("li");
+    replyLi.classList.add("reply");
+    comments.lastChild.appendChild(replyLi);
+    replyLi.appendChild(commentDiv);
+  }
   const userDiv = document.createElement("div");
   userDiv.classList.add("username-container");
 
@@ -194,15 +199,26 @@ const createComment = function ({
       : createReplyBtn()
   );
 
-  comments.appendChild(commentDiv);
+  if (replyingTo == "") {
+    comments.appendChild(commentDiv);
+  }
 };
 
 window.addEventListener("load", () => {
-  const comments = data["comments"].sort((a, b) => a.score > b.score);
+  const dataComments = data["comments"].sort((a, b) => a.score > b.score);
 
-  for (const comment of comments) {
-    // console.log(comment);
+  for (const comment of dataComments) {
+    let i = 0;
     createComment(comment);
+    for (const reply of comment.replies) {
+      if (i == 0) {
+        const repliesUl = document.createElement("ul");
+        repliesUl.classList.add("replies");
+        comments.appendChild(repliesUl);
+      }
+      createComment(reply);
+      i++;
+    }
   }
 });
 for (const [key, val] of Object.entries(data)) {
@@ -236,5 +252,5 @@ for (const [key, val] of Object.entries(data)) {
 }
 // console.log(currentUser);
 console.log(users);
-deleteBtn.addEventListener("click", openDialog);
-cancelBtn.addEventListener("click", closeDialog);
+// deleteBtn.addEventListener("click", openDialog);
+// cancelBtn.addEventListener("click", closeDialog);
