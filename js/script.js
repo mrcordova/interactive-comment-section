@@ -55,6 +55,15 @@ const editComment = (e) => {
   const para = comment.querySelector(".content");
   para.setAttribute("contenteditable", "true");
   para.focus({ focusVisible: true });
+
+  const updateBtn = document.createElement("button");
+  updateBtn.setAttribute("class", "update-btn rubik-500");
+  updateBtn.insertAdjacentText("afterbegin", "UPDATE");
+  updateBtn.addEventListener("click", () => {
+    para.setAttribute("contenteditable", "false");
+    updateBtn.remove();
+  });
+  comment.appendChild(updateBtn);
 };
 const createCurrentUserBtns = function () {
   const currentUserBtns = document.createElement("div");
@@ -220,7 +229,8 @@ window.addEventListener("load", () => {
   for (const comment of dataComments) {
     let i = 0;
     createComment(comment);
-    for (const reply of comment.replies) {
+    const replies = comment.replies;
+    for (const reply of replies) {
       if (i == 0) {
         const repliesUl = document.createElement("ul");
         repliesUl.classList.add("replies");
@@ -264,14 +274,17 @@ for (const [key, val] of Object.entries(data)) {
 // console.log(users);
 // deleteBtn.addEventListener("click", openDialog);
 sendBtn.addEventListener("click", (e) => {
-  console.log(e.currentTarget.parentElement);
+  // console.log(e.currentTarget.parentElement);
   const textArea = e.currentTarget.parentElement.querySelector("#add-comment");
-  createComment({
+  const comment = {
     content: textArea.value,
     id: 0,
     createdAt: "today",
     score: 0,
     user: currentUser,
-  });
+  };
+  createComment(comment);
+  textArea.value = "";
+  data["comments"].push(comment);
 });
 cancelBtn.addEventListener("click", closeDialog);
