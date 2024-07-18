@@ -8,6 +8,7 @@ let dialog = document.querySelector("dialog");
 const deleteBtn = document.querySelector(".delete-btn");
 const cancelBtn = document.querySelector(".no-cancel-btn");
 const comments = document.querySelector(".comments");
+const sendBtn = document.querySelector(".send-btn");
 const currentUser = {
   username: data["currentUser"].username,
   image: data["currentUser"].image,
@@ -260,6 +261,17 @@ for (const [key, val] of Object.entries(data)) {
   }
 }
 // console.log(currentUser);
-console.log(users);
+// console.log(users);
 // deleteBtn.addEventListener("click", openDialog);
+sendBtn.addEventListener("click", (e) => {
+  console.log(e.currentTarget.parentElement);
+  const textArea = e.currentTarget.parentElement.querySelector("#add-comment");
+  createComment({
+    content: textArea.value,
+    id: 0,
+    createdAt: "today",
+    score: 0,
+    user: currentUser,
+  });
+});
 cancelBtn.addEventListener("click", closeDialog);
