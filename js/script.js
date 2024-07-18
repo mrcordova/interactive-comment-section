@@ -7,6 +7,7 @@ const data = await dataResponse.json();
 let dialog = document.querySelector("dialog");
 const deleteBtn = document.querySelector(".delete-btn");
 const cancelBtn = document.querySelector(".no-cancel-btn");
+const yesDeleteBtn = document.querySelector(".yes-delete-btn");
 const comments = document.querySelector(".comments");
 const sendBtn = document.querySelector(".send-btn");
 let highestId = 0;
@@ -51,9 +52,9 @@ const createReplyBtn = function () {
   return replyBtn;
 };
 const editComment = (e) => {
-  // console.log(e.currentTarget.parentElement.parentElement);e
   const comment = e.currentTarget.parentElement.parentElement;
   const para = comment.querySelector(".content");
+
   para.setAttribute("contenteditable", "true");
   para.focus({ focusVisible: true });
   para.children[0].classList.toggle("rubik-700");
@@ -90,10 +91,10 @@ const editComment = (e) => {
       }
     }
     comment.content = para.textContent;
-    console.log(comment);
   });
   comment.appendChild(updateBtn);
 };
+
 const createCurrentUserBtns = function () {
   const currentUserBtns = document.createElement("div");
   currentUserBtns.classList.add("current-user-btns");
@@ -111,7 +112,13 @@ const createCurrentUserBtns = function () {
   );
   const deleteText = document.createTextNode("Delete");
   deleteBtn.appendChild(deleteText);
-  deleteBtn.addEventListener("click", openDialog);
+  deleteBtn.addEventListener("click", (e) => {
+    openDialog();
+    yesDeleteBtn.addEventListener("click", () => {
+      e.target.parentElement.parentElement.remove();
+      closeDialog();
+    });
+  });
 
   const editBtn = document.createElement("button");
   editBtn.setAttribute("class", "edit-btn rubik-700");
@@ -129,7 +136,6 @@ const createCurrentUserBtns = function () {
   editBtn.appendChild(editText);
 
   editBtn.addEventListener("click", editComment);
-
   currentUserBtns.appendChild(deleteBtn);
   currentUserBtns.appendChild(editBtn);
   return currentUserBtns;
@@ -305,8 +311,8 @@ for (const [key, val] of Object.entries(data)) {
 // console.log(users);
 // deleteBtn.addEventListener("click", openDialog);
 sendBtn.addEventListener("click", (e) => {
-  // console.log(e.currentTarget.parentElement);
   const textArea = e.currentTarget.parentElement.querySelector("#add-comment");
+
   const comment = {
     content: textArea.value,
     id: ++highestId,
