@@ -9,6 +9,7 @@ const deleteBtn = document.querySelector(".delete-btn");
 const cancelBtn = document.querySelector(".no-cancel-btn");
 const comments = document.querySelector(".comments");
 const sendBtn = document.querySelector(".send-btn");
+let highestId = 0;
 const currentUser = {
   username: data["currentUser"].username,
   image: data["currentUser"].image,
@@ -221,6 +222,7 @@ const createComment = function ({
   if (replyingTo == "") {
     comments.appendChild(commentDiv);
   }
+  highestId = id;
 };
 
 window.addEventListener("load", () => {
@@ -278,7 +280,7 @@ sendBtn.addEventListener("click", (e) => {
   const textArea = e.currentTarget.parentElement.querySelector("#add-comment");
   const comment = {
     content: textArea.value,
-    id: 0,
+    id: ++highestId,
     createdAt: "today",
     score: 0,
     user: currentUser,
