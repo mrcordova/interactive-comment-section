@@ -80,19 +80,25 @@ const editComment = (e) => {
     para.children[0].classList.toggle("replyingTo");
     const idText = para.parentElement.getAttribute("data-id");
     const id = idText.slice(idText.indexOf("-"));
-    let comment = data["comments"].find((comment) => comment.id == id);
-    if (comment == undefined) {
-      for (const c of data["comments"]) {
-        for (const reply of c.replies) {
-          if (reply.id == id) {
-            comment = reply;
-          }
-        }
-      }
-    }
+    // let comment = data["comments"].find((comment) => comment.id == id);
+    const comment = updateData(id);
     comment.content = para.textContent;
   });
   comment.appendChild(updateBtn);
+};
+
+const updateData = (id) => {
+  let comment = data["comments"].find((comment) => comment.id == id);
+  if (comment == undefined) {
+    for (const c of data["comments"]) {
+      for (const reply of c.replies) {
+        if (reply.id == id) {
+          comment = reply;
+        }
+      }
+    }
+  }
+  return comment;
 };
 
 const createCurrentUserBtns = function () {
@@ -115,8 +121,30 @@ const createCurrentUserBtns = function () {
   deleteBtn.addEventListener("click", (e) => {
     openDialog();
     yesDeleteBtn.addEventListener("click", () => {
-      e.target.parentElement.parentElement.remove();
+      const idText =
+        e.target.parentElement.parentElement.getAttribute("data-id");
+      const id = idText.slice(idText.indexOf("-"));
+      let found = false;
+      for (let i = 0; i < data.comments.length; i++) {
+        if (data.comments[i].id == id) {
+          delete data.comments[i];
+          found = true;
+        }
+      }
+      if (found == false) {
+        outloop: for (let i = 0; i < data.comments.length; i++) {
+          for (let j = 0; i < data.comments[i].replies.length; j++) {
+            if (data.comments[i].replies[j].id == id) {
+              delete data.comments[i].replies[j];
+              found = true;
+              break outloop;
+            }
+          }
+        }
+      }
+
       closeDialog();
+      e.target.parentElement.parentElement.remove();
     });
   });
 
