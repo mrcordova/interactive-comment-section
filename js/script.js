@@ -56,13 +56,41 @@ const editComment = (e) => {
   const para = comment.querySelector(".content");
   para.setAttribute("contenteditable", "true");
   para.focus({ focusVisible: true });
+  para.children[0].classList.toggle("rubik-700");
+  para.children[0].classList.toggle("replyingTo");
 
   const updateBtn = document.createElement("button");
   updateBtn.setAttribute("class", "update-btn rubik-500");
   updateBtn.insertAdjacentText("afterbegin", "UPDATE");
+
   updateBtn.addEventListener("click", () => {
     para.setAttribute("contenteditable", "false");
     updateBtn.remove();
+    const startIdx = para.firstChild.textContent.indexOf("@");
+    const endIdx = para.firstChild.textContent.indexOf(
+      " ",
+      para.firstChild.textContent.indexOf("@")
+    );
+    const originalTest = para.firstChild.textContent;
+    para.firstChild.textContent = originalTest.slice(startIdx, endIdx);
+    para.insertAdjacentText("afterbegin", originalTest.slice(0, startIdx));
+    para.children[0].insertAdjacentText("afterend", originalTest.slice(endIdx));
+    para.children[0].classList.toggle("rubik-700");
+    para.children[0].classList.toggle("replyingTo");
+    const idText = para.parentElement.getAttribute("data-id");
+    const id = idText.slice(idText.indexOf("-"));
+    let comment = data["comments"].find((comment) => comment.id == id);
+    if (comment == undefined) {
+      for (const c of data["comments"]) {
+        for (const reply of c.replies) {
+          if (reply.id == id) {
+            comment = reply;
+          }
+        }
+      }
+    }
+    comment.content = para.textContent;
+    console.log(comment);
   });
   comment.appendChild(updateBtn);
 };
@@ -117,6 +145,7 @@ const createComment = function ({
   const username = user.username;
   const commentDiv = document.createElement("div");
   commentDiv.classList.add("comment-container");
+  commentDiv.setAttribute("data-id", `${username}_${id}`);
 
   if (replyingTo != "") {
     const replyLi = document.createElement("li");
@@ -130,7 +159,7 @@ const createComment = function ({
   const profileImg = document.createElement("img");
   profileImg.classList.add("profile-img");
   profileImg.setAttribute("src", `./images/avatars/image-${username}.webp`);
-  profileImg.setAttribute("alt", `${username}_${id}`);
+  profileImg.setAttribute("alt", `${username}`);
   userDiv.appendChild(profileImg);
 
   const usernamePara = document.createElement("p");
