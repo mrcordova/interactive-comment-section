@@ -171,11 +171,18 @@ const createCurrentUserBtns = function () {
 
 const updateScore = function (e) {
   const scorePara = e.currentTarget.parentElement.querySelector(".score");
+  const content = e.currentTarget.parentElement.parentElement;
+  const id = content
+    .getAttribute("data-id")
+    .slice(content.getAttribute("data-id").indexOf("-"));
+  const comment = updateData(id);
 
   scorePara.textContent = `${
     parseInt(scorePara.textContent) +
     parseInt(e.currentTarget.getAttribute("data-value"))
   }`;
+  comment.score = scorePara.textContent;
+  console.log(comment);
 };
 const createComment = function ({
   content,
