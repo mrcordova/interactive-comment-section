@@ -168,6 +168,15 @@ const createCurrentUserBtns = function () {
   currentUserBtns.appendChild(editBtn);
   return currentUserBtns;
 };
+
+const updateScore = function (e) {
+  const scorePara = e.currentTarget.parentElement.querySelector(".score");
+
+  scorePara.textContent = `${
+    parseInt(scorePara.textContent) +
+    parseInt(e.currentTarget.getAttribute("data-value"))
+  }`;
+};
 const createComment = function ({
   content,
   id,
@@ -245,7 +254,8 @@ const createComment = function ({
   commentDiv.appendChild(scoreDiv);
 
   const plusBtn = document.createElement("button");
-
+  plusBtn.classList.add("plus-sign-btn");
+  plusBtn.setAttribute("data-value", 1);
   plusBtn.appendChild(
     createSvg(
       11,
@@ -254,7 +264,7 @@ const createComment = function ({
       "#C5C6EF"
     )
   );
-
+  plusBtn.addEventListener("click", updateScore);
   scoreDiv.appendChild(plusBtn);
 
   scoreDiv.insertAdjacentHTML(
@@ -264,6 +274,7 @@ const createComment = function ({
 
   const minusBtn = document.createElement("button");
   minusBtn.classList.add("minus-sign-btn");
+  minusBtn.setAttribute("data-value", -1);
 
   minusBtn.appendChild(
     createSvg(
@@ -273,7 +284,7 @@ const createComment = function ({
       "#C5C6EF"
     )
   );
-
+  minusBtn.addEventListener("click", updateScore);
   scoreDiv.appendChild(minusBtn);
 
   commentDiv.appendChild(
