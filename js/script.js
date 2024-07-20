@@ -192,49 +192,6 @@ const createCurrentUserBtns = function () {
     openDialog();
 
     commentToDelete = e.target.parentElement.parentElement;
-    // yesDeleteBtn.addEventListener(
-    //   "click",
-    //   () => {
-    //     // const idText =
-    //     //   e.target.parentElement.parentElement.getAttribute("data-id");
-    //     // const id = idText.slice(idText.indexOf("-"));
-    //     let found = false;
-    //     for (let i = 0; i < data.comments.length; i++) {
-    //       if (data.comments[i].id == id) {
-    //         delete data.comments[i].replies;
-    //         data.comments[i].replies = [];
-    //         delete data.comments[i];
-    //         data.comments = data.comments.filter(function () {
-    //           return true;
-    //         });
-    //         found = true;
-    //         break;
-    //       }
-    //     }
-
-    //     if (found == false) {
-    //       outloop: for (let i = 0; i < data.comments.length; i++) {
-    //         for (let j = 0; i < data.comments[i].replies.length; j++) {
-    //           if (data.comments[i].replies[j].id == id) {
-    //             console.log(data.comments[i].replies[j]);
-    //             delete data.comments[i].replies[j];
-    //             found = true;
-    //             data.comments[i].replies = data.comments[i].replies.filter(
-    //               function () {
-    //                 return true;
-    //               }
-    //             );
-    //             console.log(data.comments[i].replies);
-    //             break outloop;
-    //           }
-    //         }
-    //       }
-    //     }
-    //     closeDialog();
-    //     e.target.parentElement.parentElement.remove();
-    //   },
-    //   { once: true }
-    // );
   });
 
   const editBtn = document.createElement("button");
@@ -443,10 +400,8 @@ window.addEventListener("load", () => {
     createComment(comment);
     textArea.value = "";
     data["comments"].push(comment);
-    // console.log(data["comments"]);
   });
 
-  // console.log(sendEle);
   comments.insertAdjacentElement("afterend", sendEle);
 });
 // for (const [key, val] of Object.entries(data)) {
@@ -482,9 +437,6 @@ window.addEventListener("load", () => {
 cancelBtn.addEventListener("click", closeDialog);
 yesDeleteBtn.addEventListener("click", () => {
   console.log("run");
-  // const idText =
-  //   e.target.parentElement.parentElement.getAttribute("data-id");
-  // const id = idText.slice(idText.indexOf("-"));
   const idText = commentToDelete.getAttribute("data-id");
   const id = idText.slice(idText.indexOf("-"));
 
@@ -506,7 +458,6 @@ yesDeleteBtn.addEventListener("click", () => {
     outloop: for (let i = 0; i < data.comments.length; i++) {
       for (let j = 0; i < data.comments[i].replies.length; j++) {
         if (data.comments[i].replies[j].id == id) {
-          // console.log(data.comments[i].replies[j]);
           delete data.comments[i].replies[j];
           found = true;
           data.comments[i].replies = data.comments[i].replies.filter(
@@ -514,7 +465,6 @@ yesDeleteBtn.addEventListener("click", () => {
               return true;
             }
           );
-          // console.log(data.comments[i].replies);
           break outloop;
         }
       }
@@ -522,6 +472,4 @@ yesDeleteBtn.addEventListener("click", () => {
   }
   closeDialog();
   commentToDelete.remove();
-  // console.log(comments.querySelectorAll(`[data-id]$="${commentToDelete}"`));
-  // e.target.parentElement.parentElement.remove();
 });
