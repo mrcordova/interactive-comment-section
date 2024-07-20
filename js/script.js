@@ -58,17 +58,18 @@ const replyingToComment = (e) => {
   replyDiv.classList.add("comment-container");
   const replyBtn = replyDiv.querySelector("button");
   replyBtn.addEventListener("click", () => {
-    // console.log(e.target);
     const textArea = replyDiv.querySelector("textarea");
 
     const comment = {
-      content: textArea.value,
       id: ++highestId,
+      content: textArea.value,
       createdAt: "today",
       score: 0,
-      user: currentUser,
       replyingTo: e.target.parentElement.querySelector(".username").textContent,
+      user: { image: currentUser["image"], username: currentUser.username },
+      username: currentUser.username,
     };
+
     replyDiv.remove();
 
     const container =
@@ -88,13 +89,10 @@ const replyingToComment = (e) => {
     }
 
     createComment(comment, container);
-    console.log(container.previousElementSibling);
     const idText = container.previousElementSibling.getAttribute("data-id");
     const id = idText.slice(idText.indexOf("-"));
     const dataComment = updateData(id);
     dataComment.replies.push(comment);
-    // console.log(dataComment);
-    // data["comments"].push(comment);
   });
   e.currentTarget.parentElement.insertAdjacentElement("afterend", replyDiv);
 };
@@ -111,7 +109,7 @@ const createReplyElement = function (buttonText) {
 
   const profileImg = document.createElement("img");
   profileImg.setAttribute("class", "add-comment-pic");
-  profileImg.setAttribute("src", "./images/avatars/image-juliusomo.webp");
+  profileImg.setAttribute("src", `${currentUser.image.webp}`);
 
   replyDiv.appendChild(profileImg);
 
@@ -161,7 +159,6 @@ const updateData = (id) => {
   let comment = data["comments"].find((comment) => comment.id == id);
   if (comment == undefined) {
     for (const c of data["comments"]) {
-      console.log(c);
       for (const reply of c.replies) {
         if (reply.id == id) {
           comment = reply;
@@ -257,7 +254,7 @@ const updateScore = function (e) {
   const id = content
     .getAttribute("data-id")
     .slice(content.getAttribute("data-id").indexOf("-"));
-  console.log(id);
+
   const comment = updateData(id);
 
   const updatedScore =
@@ -270,7 +267,6 @@ const updateScore = function (e) {
     "data-choice",
     e.currentTarget.getAttribute("data-value")
   );
-  // console.log(updatedScore);
 
   scorePara.textContent = `${parseInt(scorePara.textContent) + updatedScore}`;
   comment.score = parseInt(scorePara.textContent);
@@ -287,7 +283,6 @@ const createComment = function (
   if (replyingTo != "" && originalComment != null) {
     const replyLi = document.createElement("li");
     replyLi.classList.add("reply");
-    // console.log(originalComment);
     originalComment.appendChild(replyLi);
     replyLi.appendChild(commentDiv);
   }
@@ -303,8 +298,6 @@ const createComment = function (
   const usernamePara = document.createElement("p");
   usernamePara.setAttribute("class", `username rubik-700`);
   usernamePara.insertAdjacentText("afterbegin", `${username}`);
-  // const usernameParaText = document.createTextNode(`${user}`);
-  // usernamePara.appendChild(usernameParaText);
 
   // check if current user
   usernamePara.insertAdjacentHTML(
@@ -313,10 +306,6 @@ const createComment = function (
       ? '<span class="you">you</span>'
       : "<span></span>"
   );
-  // const youSpan = document.createElement("span");
-  // youSpan.setAttribute("you");
-  // youSpan.insertAdjacentText("beforeend", "you");
-  // usernamePara.appendChild(youSpan);
 
   userDiv.appendChild(usernamePara);
 
@@ -423,11 +412,11 @@ window.addEventListener("load", () => {
       e.currentTarget.parentElement.querySelector("#add-comment");
 
     const comment = {
-      content: textArea.value,
       id: ++highestId,
+      content: textArea.value,
       createdAt: "today",
       score: 0,
-      user: currentUser,
+      user: { image: currentUser.image, username: currentUser.username },
       replies: [],
     };
     createComment(comment);
