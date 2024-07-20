@@ -161,6 +161,7 @@ const updateData = (id) => {
   let comment = data["comments"].find((comment) => comment.id == id);
   if (comment == undefined) {
     for (const c of data["comments"]) {
+      console.log(c);
       for (const reply of c.replies) {
         if (reply.id == id) {
           comment = reply;
@@ -256,6 +257,7 @@ const updateScore = function (e) {
   const id = content
     .getAttribute("data-id")
     .slice(content.getAttribute("data-id").indexOf("-"));
+  console.log(id);
   const comment = updateData(id);
 
   const updatedScore =
@@ -271,7 +273,7 @@ const updateScore = function (e) {
   // console.log(updatedScore);
 
   scorePara.textContent = `${parseInt(scorePara.textContent) + updatedScore}`;
-  comment.score = scorePara.textContent;
+  comment.score = parseInt(scorePara.textContent);
 };
 const createComment = function (
   { content, id, createdAt, score, user, replyingTo = "" },
@@ -426,6 +428,7 @@ window.addEventListener("load", () => {
       createdAt: "today",
       score: 0,
       user: currentUser,
+      replies: [],
     };
     createComment(comment);
     textArea.value = "";
