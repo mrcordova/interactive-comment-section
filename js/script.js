@@ -239,20 +239,39 @@ const createCurrentUserBtns = function () {
   return currentUserBtns;
 };
 
+const setScore = function (e) {
+  // console.log(e.currentTarget.parentElement.getAttribute("data-choice"));
+  if (e.currentTarget.parentElement.getAttribute("data-choice") == null) {
+    e.currentTarget.parentElement.setAttribute(
+      "data-choice",
+      e.currentTarget.getAttribute("data-value")
+    );
+  }
+};
+
 const updateScore = function (e) {
   const scorePara = e.currentTarget.parentElement.querySelector(".score");
   const content = e.currentTarget.parentElement.parentElement;
+
   const id = content
     .getAttribute("data-id")
     .slice(content.getAttribute("data-id").indexOf("-"));
   const comment = updateData(id);
 
-  scorePara.textContent = `${
-    parseInt(scorePara.textContent) +
-    parseInt(e.currentTarget.getAttribute("data-value"))
-  }`;
+  const updatedScore =
+    e.currentTarget.parentElement.getAttribute("data-choice") ==
+    e.currentTarget.getAttribute("data-value")
+      ? 0
+      : parseInt(e.currentTarget.getAttribute("data-value"));
+
+  e.currentTarget.parentElement.setAttribute(
+    "data-choice",
+    e.currentTarget.getAttribute("data-value")
+  );
+  // console.log(updatedScore);
+
+  scorePara.textContent = `${parseInt(scorePara.textContent) + updatedScore}`;
   comment.score = scorePara.textContent;
-  // console.log(comment);
 };
 const createComment = function (
   { content, id, createdAt, score, user, replyingTo = "" },
@@ -339,6 +358,7 @@ const createComment = function (
     )
   );
   plusBtn.addEventListener("click", updateScore);
+  plusBtn.addEventListener("click", setScore, { once: true });
   scoreDiv.appendChild(plusBtn);
 
   scoreDiv.insertAdjacentHTML(
@@ -349,7 +369,7 @@ const createComment = function (
   const minusBtn = document.createElement("button");
   minusBtn.classList.add("minus-sign-btn");
   minusBtn.setAttribute("data-value", -1);
-
+  minusBtn.addEventListener("click", setScore, { once: true });
   minusBtn.appendChild(
     createSvg(
       11,
