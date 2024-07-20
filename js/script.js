@@ -2,7 +2,7 @@
   plugins: ["jsdom-quokka-plugin"],
   jsdom: { file: "index.html" }, // Located in project root
 });
-const dataResponse = await fetch("http://127.0.0.1:5500/data.json");
+const dataResponse = await fetch("data.json");
 const data = await dataResponse.json();
 let dialog = document.querySelector("dialog");
 const deleteBtn = document.querySelector(".delete-btn");
@@ -11,6 +11,7 @@ const yesDeleteBtn = document.querySelector(".yes-delete-btn");
 const comments = document.querySelector(".comments");
 const sendBtn = document.querySelector(".send-btn");
 const main = document.querySelector("main");
+let commentToDelete = null;
 let highestId = 0;
 const currentUser = {
   username: data["currentUser"].username,
@@ -94,6 +95,7 @@ const replyingToComment = (e) => {
     const dataComment = updateData(id);
     dataComment.replies.push(comment);
   });
+
   e.currentTarget.parentElement.insertAdjacentElement("afterend", replyDiv);
 };
 const createReplyElement = function (buttonText) {
@@ -188,32 +190,51 @@ const createCurrentUserBtns = function () {
   deleteBtn.appendChild(deleteText);
   deleteBtn.addEventListener("click", (e) => {
     openDialog();
-    yesDeleteBtn.addEventListener("click", () => {
-      const idText =
-        e.target.parentElement.parentElement.getAttribute("data-id");
-      const id = idText.slice(idText.indexOf("-"));
-      let found = false;
-      for (let i = 0; i < data.comments.length; i++) {
-        if (data.comments[i].id == id) {
-          delete data.comments[i];
-          found = true;
-        }
-      }
-      if (found == false) {
-        outloop: for (let i = 0; i < data.comments.length; i++) {
-          for (let j = 0; i < data.comments[i].replies.length; j++) {
-            if (data.comments[i].replies[j].id == id) {
-              delete data.comments[i].replies[j];
-              found = true;
-              break outloop;
-            }
-          }
-        }
-      }
 
-      closeDialog();
-      e.target.parentElement.parentElement.remove();
-    });
+    commentToDelete = e.target.parentElement.parentElement;
+    // yesDeleteBtn.addEventListener(
+    //   "click",
+    //   () => {
+    //     // const idText =
+    //     //   e.target.parentElement.parentElement.getAttribute("data-id");
+    //     // const id = idText.slice(idText.indexOf("-"));
+    //     let found = false;
+    //     for (let i = 0; i < data.comments.length; i++) {
+    //       if (data.comments[i].id == id) {
+    //         delete data.comments[i].replies;
+    //         data.comments[i].replies = [];
+    //         delete data.comments[i];
+    //         data.comments = data.comments.filter(function () {
+    //           return true;
+    //         });
+    //         found = true;
+    //         break;
+    //       }
+    //     }
+
+    //     if (found == false) {
+    //       outloop: for (let i = 0; i < data.comments.length; i++) {
+    //         for (let j = 0; i < data.comments[i].replies.length; j++) {
+    //           if (data.comments[i].replies[j].id == id) {
+    //             console.log(data.comments[i].replies[j]);
+    //             delete data.comments[i].replies[j];
+    //             found = true;
+    //             data.comments[i].replies = data.comments[i].replies.filter(
+    //               function () {
+    //                 return true;
+    //               }
+    //             );
+    //             console.log(data.comments[i].replies);
+    //             break outloop;
+    //           }
+    //         }
+    //       }
+    //     }
+    //     closeDialog();
+    //     e.target.parentElement.parentElement.remove();
+    //   },
+    //   { once: true }
+    // );
   });
 
   const editBtn = document.createElement("button");
@@ -422,6 +443,7 @@ window.addEventListener("load", () => {
     createComment(comment);
     textArea.value = "";
     data["comments"].push(comment);
+    // console.log(data["comments"]);
   });
 
   // console.log(sendEle);
@@ -458,3 +480,48 @@ window.addEventListener("load", () => {
 // deleteBtn.addEventListener("click", openDialog);
 
 cancelBtn.addEventListener("click", closeDialog);
+yesDeleteBtn.addEventListener("click", () => {
+  console.log("run");
+  // const idText =
+  //   e.target.parentElement.parentElement.getAttribute("data-id");
+  // const id = idText.slice(idText.indexOf("-"));
+  const idText = commentToDelete.getAttribute("data-id");
+  const id = idText.slice(idText.indexOf("-"));
+
+  let found = false;
+  for (let i = 0; i < data.comments.length; i++) {
+    if (data.comments[i].id == id) {
+      delete data.comments[i].replies;
+      data.comments[i].replies = [];
+      delete data.comments[i];
+      data.comments = data.comments.filter(function () {
+        return true;
+      });
+      found = true;
+      break;
+    }
+  }
+
+  if (found == false) {
+    outloop: for (let i = 0; i < data.comments.length; i++) {
+      for (let j = 0; i < data.comments[i].replies.length; j++) {
+        if (data.comments[i].replies[j].id == id) {
+          // console.log(data.comments[i].replies[j]);
+          delete data.comments[i].replies[j];
+          found = true;
+          data.comments[i].replies = data.comments[i].replies.filter(
+            function () {
+              return true;
+            }
+          );
+          // console.log(data.comments[i].replies);
+          break outloop;
+        }
+      }
+    }
+  }
+  closeDialog();
+  commentToDelete.remove();
+  // console.log(comments.querySelectorAll(`[data-id]$="${commentToDelete}"`));
+  // e.target.parentElement.parentElement.remove();
+});
