@@ -58,7 +58,7 @@ const replyingToComment = (e) => {
   replyDiv.classList.add("comment-container");
   const replyBtn = replyDiv.querySelector("button");
   replyBtn.addEventListener("click", () => {
-    // console.log(e.target.parentElement.querySelector(".username").textContent);
+    // console.log(e.target);
     const textArea = replyDiv.querySelector("textarea");
 
     const comment = {
@@ -88,7 +88,12 @@ const replyingToComment = (e) => {
     }
 
     createComment(comment, container);
-
+    console.log(container.previousElementSibling);
+    const idText = container.previousElementSibling.getAttribute("data-id");
+    const id = idText.slice(idText.indexOf("-"));
+    const dataComment = updateData(id);
+    dataComment.replies.push(comment);
+    // console.log(dataComment);
     // data["comments"].push(comment);
   });
   e.currentTarget.parentElement.insertAdjacentElement("afterend", replyDiv);
@@ -247,7 +252,7 @@ const updateScore = function (e) {
     parseInt(e.currentTarget.getAttribute("data-value"))
   }`;
   comment.score = scorePara.textContent;
-  console.log(comment);
+  // console.log(comment);
 };
 const createComment = function (
   { content, id, createdAt, score, user, replyingTo = "" },
