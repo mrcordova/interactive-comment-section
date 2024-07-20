@@ -216,19 +216,27 @@ const createCurrentUserBtns = function () {
 };
 
 const setScore = function (e) {
-  console.log(e.currentTarget.parentElement.getAttribute("data-choice"));
-  if (e.currentTarget.parentElement.getAttribute("data-choice") == null) {
-    e.currentTarget.parentElement.setAttribute(
-      "data-choice",
-      e.currentTarget.getAttribute("data-value")
-    );
-    const scorePara = e.currentTarget.parentElement.querySelector(".score");
-    scorePara.textContent = `${
-      parseInt(scorePara.textContent) +
-      parseInt(e.currentTarget.getAttribute("data-value"))
-    }`;
-  }
+  // console.log(e.currentTarget.parentElement.getAttribute("data-choice"));
+  // if (e.currentTarget.parentElement.getAttribute("data-choice") == null) {
+  //   const scorePara = e.currentTarget.parentElement.querySelector(".score");
+  //   e.currentTarget.parentElement.setAttribute(
+  //     "data-choice",
+  //     e.currentTarget.getAttribute("data-value")
+  //   );
+  //   e.currentTarget.parentElement.setAttribute(
+  //     "data-score",
+  //     scorePara.textContent.trim()
+  //   );
+  //   scorePara.textContent = `${
+  //     parseInt(scorePara.textContent) +
+  //     parseInt(e.currentTarget.getAttribute("data-value"))
+  //   }`;
+  // }
 };
+
+function bound(_number, _min, _max) {
+  return Math.max(Math.min(_number, _max), _min);
+}
 
 const updateScore = function (e) {
   const scorePara = e.currentTarget.parentElement.querySelector(".score");
@@ -237,21 +245,26 @@ const updateScore = function (e) {
   const id = content
     .getAttribute("data-id")
     .slice(content.getAttribute("data-id").indexOf("-"));
+  const originalScore =
+    e.currentTarget.parentElement.getAttribute("data-score");
 
   const comment = updateData(id);
 
-  const updatedScore =
-    e.currentTarget.parentElement.getAttribute("data-choice") ==
-    e.currentTarget.getAttribute("data-value")
-      ? 0
-      : parseInt(e.currentTarget.getAttribute("data-value"));
+  const tempScore =
+    parseInt(scorePara.textContent) +
+    parseInt(e.currentTarget.getAttribute("data-value"));
+
+  const min = parseInt(originalScore) - 1;
+  const max = parseInt(originalScore) + 1;
+
+  let updatedScore = bound(tempScore, min, max);
 
   e.currentTarget.parentElement.setAttribute(
     "data-choice",
     e.currentTarget.getAttribute("data-value")
   );
 
-  scorePara.textContent = `${parseInt(scorePara.textContent) + updatedScore}`;
+  scorePara.textContent = `${updatedScore}`;
   comment.score = parseInt(scorePara.textContent);
 };
 const createComment = function (
@@ -318,6 +331,7 @@ const createComment = function (
 
   const scoreDiv = document.createElement("div");
   scoreDiv.classList.add("score-container");
+  scoreDiv.setAttribute("data-score", score || 0);
   commentDiv.appendChild(scoreDiv);
 
   const plusBtn = document.createElement("button");
