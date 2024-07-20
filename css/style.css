@@ -228,10 +228,10 @@ p {
   padding: 0.7rem 1rem;
   margin-block-start: 0.5rem;
   align-items: center;
-  width: 100%;
+  /* width: 100%; */
   gap: 1rem;
 }
-#add-comment {
+.add-comment {
   grid-row: 1;
   /* grid-column: 1; */
   all: unset;
@@ -241,7 +241,7 @@ p {
   height: 4.4rem;
 }
 
-#add-comment:hover {
+.add-comment:hover {
   border: 1px solid var(--Moderate-blue);
   cursor: pointer;
 }

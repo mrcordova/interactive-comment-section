@@ -10,6 +10,7 @@ const cancelBtn = document.querySelector(".no-cancel-btn");
 const yesDeleteBtn = document.querySelector(".yes-delete-btn");
 const comments = document.querySelector(".comments");
 const sendBtn = document.querySelector(".send-btn");
+const main = document.querySelector("main");
 let highestId = 0;
 const currentUser = {
   username: data["currentUser"].username,
@@ -49,7 +50,71 @@ const createReplyBtn = function () {
   );
   const replyText = document.createTextNode("Reply");
   replyBtn.appendChild(replyText);
+  replyBtn.addEventListener("click", replyingToComment);
   return replyBtn;
+};
+const replyingToComment = (e) => {
+  const replyDiv = createReplyElement("REPLY");
+  replyDiv.classList.add("comment-container");
+  const replyBtn = replyDiv.querySelector("button");
+  replyBtn.addEventListener("click", () => {
+    // console.log(e.target.parentElement.querySelector(".username").textContent);
+    const textArea = replyDiv.querySelector("textarea");
+
+    const comment = {
+      content: textArea.value,
+      id: ++highestId,
+      createdAt: "today",
+      score: 0,
+      user: currentUser,
+      replyingTo: e.target.parentElement.querySelector(".username").textContent,
+    };
+    replyDiv.remove();
+
+    const container =
+      e.target.parentElement.parentElement.parentElement.classList.contains(
+        "replies"
+      )
+        ? e.target.parentElement.parentElement.parentElement
+        : e.target.parentElement?.nextElementSibling.classList.contains(
+            "replies"
+          )
+        ? e.target.parentElement.nextElementSibling
+        : document.createElement("ul");
+
+    if (!container.classList.contains("replies")) {
+      container.classList.add("replies");
+      e.target.parentElement.insertAdjacentElement("afterend", container);
+    }
+
+    createComment(comment, container);
+
+    // data["comments"].push(comment);
+  });
+  e.currentTarget.parentElement.insertAdjacentElement("afterend", replyDiv);
+};
+const createReplyElement = function (buttonText) {
+  const replyDiv = document.createElement("div");
+  replyDiv.classList.add("add-comment-container");
+
+  const textArea = document.createElement("textarea");
+  textArea.setAttribute("name", "add-comment");
+  textArea.setAttribute("class", "add-comment");
+  textArea.setAttribute("placeholder", "Add a comment...");
+
+  replyDiv.appendChild(textArea);
+
+  const profileImg = document.createElement("img");
+  profileImg.setAttribute("class", "add-comment-pic");
+  profileImg.setAttribute("src", "./images/avatars/image-juliusomo.webp");
+
+  replyDiv.appendChild(profileImg);
+
+  const button = document.createElement("button");
+  button.setAttribute("class", "send-btn rubik-500");
+  button.insertAdjacentText("afterbegin", `${buttonText}`);
+  replyDiv.appendChild(button);
+  return replyDiv;
 };
 const editComment = (e) => {
   const comment = e.currentTarget.parentElement.parentElement;
@@ -184,23 +249,20 @@ const updateScore = function (e) {
   comment.score = scorePara.textContent;
   console.log(comment);
 };
-const createComment = function ({
-  content,
-  id,
-  createdAt,
-  score,
-  user,
-  replyingTo = "",
-}) {
+const createComment = function (
+  { content, id, createdAt, score, user, replyingTo = "" },
+  originalComment = null
+) {
   const username = user.username;
   const commentDiv = document.createElement("div");
   commentDiv.classList.add("comment-container");
   commentDiv.setAttribute("data-id", `${username}_${id}`);
 
-  if (replyingTo != "") {
+  if (replyingTo != "" && originalComment != null) {
     const replyLi = document.createElement("li");
     replyLi.classList.add("reply");
-    comments.lastChild.appendChild(replyLi);
+    // console.log(originalComment);
+    originalComment.appendChild(replyLi);
     replyLi.appendChild(commentDiv);
   }
   const userDiv = document.createElement("div");
@@ -250,7 +312,7 @@ const createComment = function ({
   contentPara.insertAdjacentHTML(
     "afterbegin",
     replyingTo != ""
-      ? `<span class="replyingTo rubik-700">@${replyingTo} </span>`
+      ? `<span class="replyingTo rubik-700" contenteditable="false">@${replyingTo} </span>`
       : "<span></span>"
   );
 
@@ -317,57 +379,65 @@ window.addEventListener("load", () => {
       if (i == 0) {
         const repliesUl = document.createElement("ul");
         repliesUl.classList.add("replies");
-        comments.appendChild(repliesUl);
+        comments.lastChild.insertAdjacentElement("afterend", repliesUl);
+        createComment(reply, repliesUl);
+      } else {
+        createComment(reply, comments.lastChild);
       }
-      createComment(reply);
       i++;
     }
   }
-});
-for (const [key, val] of Object.entries(data)) {
-  if (key === "comments") {
-    for (const comment of val) {
-      if (users[comment.user.username] == undefined) {
-        users[comment.user.username] = {
-          replies: [],
-          comments: [],
-        };
-      }
 
-      //   if (users[comment.user.username]?.replies == undefined) {
-      //     users[comment.user.username]["replies"] = [];
-      //   }
-      users[comment.user.username] = {
-        image: comment.user.image,
-        replies: [...users[comment.user.username].replies, ...comment.replies],
-        comments: [
-          ...users[comment.user.username].comments,
-          {
-            id: comment.id,
-            content: comment.content,
-            createdAt: comment.createdAt,
-            score: comment.score,
-          },
-        ],
-      };
-    }
-  }
-}
+  const sendEle = createReplyElement("SEND");
+  sendEle.children[0].setAttribute("id", "add-comment");
+  const sendBtn = sendEle.querySelector(".send-btn");
+  sendBtn.addEventListener("click", (e) => {
+    const textArea =
+      e.currentTarget.parentElement.querySelector("#add-comment");
+
+    const comment = {
+      content: textArea.value,
+      id: ++highestId,
+      createdAt: "today",
+      score: 0,
+      user: currentUser,
+    };
+    createComment(comment);
+    textArea.value = "";
+    data["comments"].push(comment);
+  });
+
+  // console.log(sendEle);
+  comments.insertAdjacentElement("afterend", sendEle);
+});
+// for (const [key, val] of Object.entries(data)) {
+//   if (key === "comments") {
+//     for (const comment of val) {
+//       if (users[comment.user.username] == undefined) {
+//         users[comment.user.username] = {
+//           replies: [],
+//           comments: [],
+//         };
+//       }
+
+//       users[comment.user.username] = {
+//         image: comment.user.image,
+//         replies: [...users[comment.user.username].replies, ...comment.replies],
+//         comments: [
+//           ...users[comment.user.username].comments,
+//           {
+//             id: comment.id,
+//             content: comment.content,
+//             createdAt: comment.createdAt,
+//             score: comment.score,
+//           },
+//         ],
+//       };
+//     }
+//   }
+// }
 // console.log(currentUser);
 // console.log(users);
 // deleteBtn.addEventListener("click", openDialog);
-sendBtn.addEventListener("click", (e) => {
-  const textArea = e.currentTarget.parentElement.querySelector("#add-comment");
 
-  const comment = {
-    content: textArea.value,
-    id: ++highestId,
-    createdAt: "today",
-    score: 0,
-    user: currentUser,
-  };
-  createComment(comment);
-  textArea.value = "";
-  data["comments"].push(comment);
-});
 cancelBtn.addEventListener("click", closeDialog);
