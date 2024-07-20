@@ -216,12 +216,17 @@ const createCurrentUserBtns = function () {
 };
 
 const setScore = function (e) {
-  // console.log(e.currentTarget.parentElement.getAttribute("data-choice"));
+  console.log(e.currentTarget.parentElement.getAttribute("data-choice"));
   if (e.currentTarget.parentElement.getAttribute("data-choice") == null) {
     e.currentTarget.parentElement.setAttribute(
       "data-choice",
       e.currentTarget.getAttribute("data-value")
     );
+    const scorePara = e.currentTarget.parentElement.querySelector(".score");
+    scorePara.textContent = `${
+      parseInt(scorePara.textContent) +
+      parseInt(e.currentTarget.getAttribute("data-value"))
+    }`;
   }
 };
 
