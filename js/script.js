@@ -455,7 +455,6 @@ window.addEventListener("load", () => {
 
 cancelBtn.addEventListener("click", closeDialog);
 yesDeleteBtn.addEventListener("click", () => {
-  console.log("run");
   const idText = commentToDelete.getAttribute("data-id");
   const id = idText.slice(idText.indexOf("-"));
 
