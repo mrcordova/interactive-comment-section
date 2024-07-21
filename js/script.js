@@ -86,7 +86,7 @@ const replyingToComment = (e) => {
   const replyDiv = createReplyElement("REPLY");
   replyDiv.classList.add("comment-container");
   const replyBtn = replyDiv.querySelector("button");
-  replyBtn.addEventListener("click", () => {
+  replyBtn.addEventListener("click", async () => {
     const textArea = replyDiv.querySelector("textarea");
 
     const comment = {
@@ -122,6 +122,9 @@ const replyingToComment = (e) => {
     const id = idText.slice(idText.indexOf("-"));
     const dataComment = updateData(id);
     dataComment.replies.push(comment);
+    await updateDoc(commentsRef, {
+      comments: data.comments,
+    });
   });
 
   e.currentTarget.parentElement.insertAdjacentElement("afterend", replyDiv);
