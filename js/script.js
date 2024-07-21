@@ -2,24 +2,52 @@
   plugins: ["jsdom-quokka-plugin"],
   jsdom: { file: "index.html" }, // Located in project root
 });
-const dataResponse = await fetch("data.json");
-const data = await dataResponse.json();
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+import {
+  initializeFirestore,
+  getFirestore,
+  collection,
+  getDoc,
+  addDoc,
+  updateDoc,
+  doc,
+} from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDeJG5i8dzogIqIRzj1q9nnz4VN-5XcCXI",
+  authDomain: "interactive-comment-sect-30ec1.firebaseapp.com",
+  projectId: "interactive-comment-sect-30ec1",
+  storageBucket: "interactive-comment-sect-30ec1.appspot.com",
+  messagingSenderId: "313310929521",
+  appId: "1:313310929521:web:e52c700cd681d39b3471d0",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = initializeFirestore(app, {
+  experimentalForceLongPolling: true,
+  useFetchStreams: false,
+});
+const commentsRef = doc(db, "data", "lE3SoWylesHoS1LrXYEY");
+const currentUserRef = doc(db, "data", "eiu997o5zOIXj0ca2eOY");
+const docSnap = await getDoc(commentsRef);
+
+// const dataResponse = await fetch("data.json");
+// const data = await dataResponse.json();
+const data = { comments: docSnap.data().comments };
+
 let dialog = document.querySelector("dialog");
-const deleteBtn = document.querySelector(".delete-btn");
 const cancelBtn = document.querySelector(".no-cancel-btn");
 const yesDeleteBtn = document.querySelector(".yes-delete-btn");
 const comments = document.querySelector(".comments");
-const sendBtn = document.querySelector(".send-btn");
-const main = document.querySelector("main");
 let commentToDelete = null;
 let highestId = 0;
-const currentUser = {
-  username: data["currentUser"].username,
-  image: data["currentUser"].image,
-  replies: [],
-  comments: [],
-};
-const users = {};
+
+const currentUser = (await getDoc(currentUserRef)).data().currentUser;
 function openDialog() {
   dialog.showModal();
 }
@@ -134,7 +162,7 @@ const editComment = (e) => {
   updateBtn.setAttribute("class", "update-btn rubik-500");
   updateBtn.insertAdjacentText("afterbegin", "UPDATE");
 
-  updateBtn.addEventListener("click", () => {
+  updateBtn.addEventListener("click", async () => {
     para.setAttribute("contenteditable", "false");
     updateBtn.remove();
     const startIdx = para.firstChild.textContent.indexOf("@");
@@ -150,9 +178,11 @@ const editComment = (e) => {
     para.children[0].classList.toggle("replyingTo");
     const idText = para.parentElement.getAttribute("data-id");
     const id = idText.slice(idText.indexOf("-"));
-    // let comment = data["comments"].find((comment) => comment.id == id);
     const comment = updateData(id);
     comment.content = para.textContent;
+    await updateDoc(commentsRef, {
+      comments: data["comments"],
+    });
   });
   comment.appendChild(updateBtn);
 };
@@ -215,30 +245,11 @@ const createCurrentUserBtns = function () {
   return currentUserBtns;
 };
 
-const setScore = function (e) {
-  // console.log(e.currentTarget.parentElement.getAttribute("data-choice"));
-  // if (e.currentTarget.parentElement.getAttribute("data-choice") == null) {
-  //   const scorePara = e.currentTarget.parentElement.querySelector(".score");
-  //   e.currentTarget.parentElement.setAttribute(
-  //     "data-choice",
-  //     e.currentTarget.getAttribute("data-value")
-  //   );
-  //   e.currentTarget.parentElement.setAttribute(
-  //     "data-score",
-  //     scorePara.textContent.trim()
-  //   );
-  //   scorePara.textContent = `${
-  //     parseInt(scorePara.textContent) +
-  //     parseInt(e.currentTarget.getAttribute("data-value"))
-  //   }`;
-  // }
-};
-
 function bound(_number, _min, _max) {
   return Math.max(Math.min(_number, _max), _min);
 }
 
-const updateScore = function (e) {
+const updateScore = async function (e) {
   const scorePara = e.currentTarget.parentElement.querySelector(".score");
   const content = e.currentTarget.parentElement.parentElement;
 
@@ -266,6 +277,9 @@ const updateScore = function (e) {
 
   scorePara.textContent = `${updatedScore}`;
   comment.score = parseInt(scorePara.textContent);
+  await updateDoc(commentsRef, {
+    comments: data["comments"],
+  });
 };
 const createComment = function (
   { content, id, createdAt, score, user, replyingTo = "" },
@@ -346,7 +360,7 @@ const createComment = function (
     )
   );
   plusBtn.addEventListener("click", updateScore);
-  plusBtn.addEventListener("click", setScore, { once: true });
+
   scoreDiv.appendChild(plusBtn);
 
   scoreDiv.insertAdjacentHTML(
@@ -357,7 +371,6 @@ const createComment = function (
   const minusBtn = document.createElement("button");
   minusBtn.classList.add("minus-sign-btn");
   minusBtn.setAttribute("data-value", -1);
-  minusBtn.addEventListener("click", setScore, { once: true });
   minusBtn.appendChild(
     createSvg(
       11,
@@ -381,80 +394,70 @@ const createComment = function (
   highestId = id;
 };
 
-window.addEventListener("load", () => {
-  const dataComments = data["comments"].sort((a, b) => a.score > b.score);
-
-  for (const comment of dataComments) {
-    let i = 0;
-    createComment(comment);
-    const replies = comment.replies;
-    for (const reply of replies) {
-      if (i == 0) {
-        const repliesUl = document.createElement("ul");
-        repliesUl.classList.add("replies");
-        comments.lastChild.insertAdjacentElement("afterend", repliesUl);
-        createComment(reply, repliesUl);
-      } else {
-        createComment(reply, comments.lastChild);
-      }
-      i++;
-    }
-  }
-
-  const sendEle = createReplyElement("SEND");
-  sendEle.children[0].setAttribute("id", "add-comment");
-  const sendBtn = sendEle.querySelector(".send-btn");
-  sendBtn.addEventListener("click", (e) => {
-    const textArea =
-      e.currentTarget.parentElement.querySelector("#add-comment");
-
-    const comment = {
-      id: ++highestId,
-      content: textArea.value,
-      createdAt: "today",
-      score: 0,
-      user: { image: currentUser.image, username: currentUser.username },
-      replies: [],
-    };
-    createComment(comment);
-    textArea.value = "";
-    data["comments"].push(comment);
-  });
-
-  comments.insertAdjacentElement("afterend", sendEle);
-});
-// for (const [key, val] of Object.entries(data)) {
-//   if (key === "comments") {
-//     for (const comment of val) {
-//       if (users[comment.user.username] == undefined) {
-//         users[comment.user.username] = {
-//           replies: [],
-//           comments: [],
-//         };
-//       }
-
-//       users[comment.user.username] = {
-//         image: comment.user.image,
-//         replies: [...users[comment.user.username].replies, ...comment.replies],
-//         comments: [
-//           ...users[comment.user.username].comments,
-//           {
-//             id: comment.id,
-//             content: comment.content,
-//             createdAt: comment.createdAt,
-//             score: comment.score,
-//           },
-//         ],
-//       };
-//     }
-//   }
+// code to set up inital data
+// try {
+//   const docRef = await addDoc(collection(db, "data"), {
+//     currentUser,
+//   });
+//   console.log("Document written with ID: ", docRef.id);
+// } catch (e) {
+//   console.error("Error adding document: ", e);
 // }
-// console.log(currentUser);
-// console.log(users);
-// deleteBtn.addEventListener("click", openDialog);
+// try {
+//   const docRef = await addDoc(collection(db, "data"), {
+//     comments: data["comments"],
+//   });
+//   console.log("Document written with ID:", docRef.id);
+// } catch (e) {
+//   console.error("error adding document: ", e);
+// }
+
+const dataComments = data["comments"].sort((a, b) => a.score > b.score);
+
+for (const comment of dataComments) {
+  let i = 0;
+  createComment(comment);
+  const replies = comment.replies;
+  for (const reply of replies) {
+    if (i == 0) {
+      const repliesUl = document.createElement("ul");
+      repliesUl.classList.add("replies");
+      comments.lastChild.insertAdjacentElement("afterend", repliesUl);
+      createComment(reply, repliesUl);
+    } else {
+      createComment(reply, comments.lastChild);
+    }
+    i++;
+  }
+}
+
+const sendEle = createReplyElement("SEND");
+sendEle.children[0].setAttribute("id", "add-comment");
+const sendBtn = sendEle.querySelector(".send-btn");
+sendBtn.addEventListener("click", async (e) => {
+  const textArea = e.currentTarget.parentElement.querySelector("#add-comment");
+
+  const comment = {
+    id: ++highestId,
+    content: textArea.value,
+    createdAt: "today",
+    score: 0,
+    user: { image: currentUser.image, username: currentUser.username },
+    replies: [],
+  };
+  createComment(comment);
+  textArea.value = "";
+  data["comments"].push(comment);
+  await updateDoc(commentsRef, {
+    comments: data["comments"],
+  });
+});
+
+comments.insertAdjacentElement("afterend", sendEle);
+// });
 
 cancelBtn.addEventListener("click", closeDialog);
-yesDeleteBtn.addEventListener("click", () => {
+yesDeleteBtn.addEventListener("click", async () => {
   const idText = commentToDelete.getAttribute("data-id");
   const id = idText.slice(idText.indexOf("-"));
 
@@ -490,4 +493,7 @@ yesDeleteBtn.addEventListener("click", () => {
   }
   closeDialog();
   commentToDelete.remove();
+  await updateDoc(commentsRef, {
+    comments: data["comments"],
+  });
 });
