@@ -32,7 +32,7 @@ const db = initializeFirestore(app, {
   experimentalForceLongPolling: true,
   useFetchStreams: false,
 });
-const commentsRef = doc(db, "data", "lE3SoWylesHoS1LrXYEY");
+const commentsRef = doc(db, "data", "uArZxv4FSp9gAPj47FKg");
 const currentUserRef = doc(db, "data", "eiu997o5zOIXj0ca2eOY");
 const docSnap = await getDoc(commentsRef);
 
