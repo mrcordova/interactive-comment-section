@@ -6,10 +6,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
 import {
   initializeFirestore,
-  getFirestore,
-  collection,
   getDoc,
-  addDoc,
   updateDoc,
   doc,
 } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
@@ -457,7 +454,6 @@ sendBtn.addEventListener("click", async (e) => {
 });
 
 comments.insertAdjacentElement("afterend", sendEle);
-// });
 
 cancelBtn.addEventListener("click", closeDialog);
 yesDeleteBtn.addEventListener("click", async () => {
